@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "watch":      "shadow-cljs watch app",
+    "watch-test": "shadow-cljs watch browser-test",
+    "test":       "shadow-cljs compile karma-test && karma start --single-run"
+  },
+  "config": {
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.3.0"
+  },
+  "dependencies": {
+    "bluebird": "3.5.1",
+    "create-react-class": "^15.6.3",
+    "react":     "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-flip-move": "^3.0.1",
+    "react-highlight.js": "^1.0.7"
+  }
+}
