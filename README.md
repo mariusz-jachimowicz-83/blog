@@ -18,6 +18,18 @@ yarn
 yarn watch
 ```
 
+To start styling
+
+```sh
+lein sass4clj auto
+```
+
+To build styles once
+
+```sh
+lein sass4clj once
+```
+
 ## Develop (old, based on ClojureScript compiler and Figwheel)
 
 #### CLJS REPL

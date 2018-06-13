@@ -16,12 +16,18 @@
                  [com.cemerick/url "0.1.1"]            ;; work with urls
                  [re-frame "0.10.5"] ;; ui framework
                  [mount "0.1.11"]
-                 [funcool/promesa "1.9.0"]]
+                 [funcool/promesa "1.9.0"]
+                 [org.webjars.bower/bootstrap "4.1.1" :exclusions [org.webjars.bower/tether
+                                                                   org.webjars.bower/jquery]]]
 
   :source-paths ["src/clj"  "src/cljc"]
   :test-paths   ["test/clj" "test/cljc"]
 
   :resource-paths ["resources" "target/resources"]
+
+  :sass {:source-paths ["src/sass"]
+         :target-path "resources/blog/public/css"
+         :output-style :nested}
 
   :profiles
   {:dev  [:project/dev :profiles/dev]
@@ -44,7 +50,8 @@
                                    [com.cemerick/piggieback "0.2.2"]
                                    [org.clojure/tools.nrepl "0.2.13"]]
                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-                  :plugins [[lein-doo "0.1.8"]]}}
+                  :plugins [[lein-doo "0.1.8"]
+                            [deraen/lein-sass4clj "0.3.1"]]}}
 
   :cljsbuild
   {:builds
