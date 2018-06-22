@@ -8,6 +8,9 @@ profiles.clj
 # compiled cljs
 resources/blog/public/js/compiled/
 
+#  compiled css
+resources/blog/public/css/
+
 /target
 /logs
 /classes

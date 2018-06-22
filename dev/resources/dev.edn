@@ -1,2 +1,2 @@
 {:duct.core/environment :development
- :duct.core/include ["starter_blockchain/config"]}
+ :duct.core/include ["blog/config"]}

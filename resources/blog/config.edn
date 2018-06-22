@@ -1,0 +1,14 @@
+{:duct.core/project-ns  blog
+ :duct.core/environment :production
+
+ :duct.module/logging {}
+ :duct.module.web/site {}
+
+ :blog.ports/web {}
+
+ :duct.router/cascading [#ig/ref :blog.ports/web]
+
+ :duct.server.http/jetty
+ {:port #duct/env ["PORT" Int :or 5000]
+  :handler #ig/ref :duct.core/handler
+  :logger  #ig/ref :duct/logger}}

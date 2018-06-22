@@ -2,6 +2,7 @@
   (:require
    [re-frame.core :as re-frame]
    [reagent.core  :as reagent]
+   [day8.re-frame.http-fx]
    [blog.events] ;; events handlers
    [blog.subs]
    [blog.components.panels :as panels]
