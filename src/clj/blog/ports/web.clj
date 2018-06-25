@@ -9,25 +9,15 @@
    [ring.middleware.transit :refer [wrap-transit-response]])
   (:import (java.io ByteArrayOutputStream)))
 
-
-;; https://github.com/JulianBirch/cljs-ajax/blob/master/dev/user.clj
-(defn write-transit [x]
-  (let [baos (ByteArrayOutputStream.)
-        w (t/writer baos :json)
-        _ (t/write w x)
-        ret (.toString baos)]
-    (.reset baos)
-    ret))
-
-(defn transit-response [response]
+(defn ->transit-response [data-vec]
   {:status 200
    :headers {"Content-Type" "application/transit+json; charset=utf-8"}
-   :body (write-transit response)})
+   :body data-vec})
 
 (defn api-routes []
   (routes
-   (GET "/" [] (transit-response [{:type :blog-post, :title "First blog post"}
-                                  {:type :blog-post, :title "Second blog post"}]))
+   (GET "/" [] (->transit-response [{:type :blog-post, :title "First blog post"}
+                                    {:type :blog-post, :title "Second blog post"}]))
    (route/resources "/")
    (route/not-found "<h1>Not Found :(</h1>")))
 
