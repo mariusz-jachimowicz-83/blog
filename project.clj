@@ -8,6 +8,8 @@
                  [duct/module.logging "0.3.1"]
                  [duct/module.web     "0.6.3"]
 
+                 [resauce "0.1.0"]
+
                  ;; cljs stuff
                  [com.google.javascript/closure-compiler-unshaded "v20180319"]
                  [thheller/shadow-cljs "2.3.16"]

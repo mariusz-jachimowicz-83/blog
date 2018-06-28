@@ -1,8 +1,10 @@
 (ns blog.events
   (:require
+   [clojure.walk :refer [postwalk]]
    [re-frame.core :refer [reg-event-db reg-event-fx]]
    [ajax.core :as ajax]
-   [blog.db   :as db]))
+   [blog.db   :as db]
+   [blog.atomic-design.atoms :as a :refer [code-block]]))
 
 (reg-event-db
  :app/db
@@ -26,16 +28,31 @@
                  :on-failure      [:get-posts-fail]}
     :db  (assoc db :loading? true)}))
 
+;;
+;; IMPORTANT TRICK
+;;
+(defn hiccup-symbols->vars
+  "Replace raw symbols in hiccup returned from server into vars so that UI will be created correctly.
+   It's because symbols of my custom hiccup forms aren't resolved as an vars, I don't know why.
+   So I am replacing them in a way that they are resolved properly further"
+  [content]
+  (postwalk
+   (fn [form]
+     (if (and (vector? form)
+              (symbol? (first form))
+              (symbol-identical? (first form) `a/code-block))
+       (into [a/code-block] (rest form))
+       form))
+   content))
+
 (reg-event-db
  :get-posts-ok
  (fn [db [_ result]]
-   (println "-- ok")
-   (println result)
-   db))
+   (assoc db :posts (hiccup-symbols->vars result))))
 
 (reg-event-db
  :get-posts-fail
  (fn [db [_ result]]
-   (println "-- fail")
+   (println "-- api failure")
    (println result)
    db))

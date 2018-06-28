@@ -1,14 +1,10 @@
 (ns blog.components.panels
   (:require
-    [cljsjs.react-highlight]
-    [re-frame.core :as rf]
-    [reagent.core  :as reagent]
-    [blog.router   :as router]))
-
-(def highlight (reagent/adapt-react-class js/Highlight))
-
-(def ^:const lorem-ipsum
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+   [cljsjs.react-highlight]
+   [re-frame.core :as rf]
+   [reagent.core  :as reagent]
+   [blog.router   :as router]
+   [blog.atomic-design.atoms :as a]))
 
 (defn menu-top [state]
   [:nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
@@ -38,51 +34,35 @@
      [:li {:class "nav-item"}
       [:a {:class "nav-link disabled", :href "#"} "Disabled"]]]]])
 
-(defn blog-card [state]
-  [:div.col-md-6
+(defn blog-card [{:keys [id title created-at intro] :as post}]
+  [:div.col-md-6 {:key id}
    [:div.card
     [:div.card-body
-     [:h3 "Some title"]
-     [:div.text-muted "2018-06-06"]
-     [:p.card-text lorem-ipsum]
+     [:h3 title]
+     [:div.text-muted created-at]
+     [:p.card-text intro]
      [:a {:href "#"} "Continue reading"]]]])
 
-(defn code-block [language src-code]
-  [:div.code-block
-   [:span.code-block-lng language]
-   [highlight {:language language} src-code]])
-
-(defn blog-post [state]
-  [:div.col-md-12
+(defn blog-post [{:keys [id title created-at content] :as post}]
+  [:div.col-md-12 {:key id}
    [:div.card
     [:div.card-body
-     [:h3 "Some title "]
-     [:div.text-muted "2018-06-06"]
-     [:p.card-text lorem-ipsum]
-     [code-block "clojure" "(def a 10)"]]]])
+     [:h3 title]
+     [:div.text-muted created-at]
+     content]]])
 
-#_(defn render-code [this]
-  (->> this
-       reagent/dom-node
-       (.highlightBlock js/hljs)))
-
-#_(defn code-block [code]
-  (reagent/create-class
-   {:render (fn []
-              [:pre>code.clj
-               (with-out-str (pprint code))])
-    :component-did-update render-code}))
-
-(defn content [state]
-  (let [_ (rf/dispatch [:get-posts])]
+(defn content [db]
+  (let [posts (:posts db)
+        _ (when-not false #_(:posts db)
+            (rf/dispatch [:get-posts]))]
     [:div.content.container-fluid
-     [:div.row [blog-card] [blog-card]]
-     [:div.row [blog-post]]]))
+     [:div.row (map blog-card posts)]
+     [:div.row (-> posts first blog-post)]]))
 
-(defn main-panel [state]
+(defn main-panel [db]
   [:div
    [menu-top]
-   [content]]
+   [content db]]
 
   #_(let [page-handler (-> state :active-page :handler)]
     [:div {}

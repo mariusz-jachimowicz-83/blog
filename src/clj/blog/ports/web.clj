@@ -1,13 +1,13 @@
 (ns blog.ports.web
   (:require
    [compojure.core :refer [context GET routes]]
-   [clojure.java.io      :as io]
-   [compojure.route      :as route]
-   [integrant.core       :as ig]
-   [cognitect.transit    :as t]
-   [ring.middleware.cors :as cors]
-   [ring.middleware.transit :refer [wrap-transit-response]])
-  (:import (java.io ByteArrayOutputStream)))
+   [clojure.java.io       :as io]
+   [compojure.route       :as route]
+   [integrant.core        :as ig]
+   [cognitect.transit     :as t]
+   [ring.middleware.cors  :as cors]
+   [blog.domain.resources :as resources]
+   [ring.middleware.transit :refer [wrap-transit-response]]))
 
 (defn ->transit-response [data-vec]
   {:status 200
@@ -16,8 +16,7 @@
 
 (defn api-routes []
   (routes
-   (GET "/" [] (->transit-response [{:type :blog-post, :title "First blog post"}
-                                    {:type :blog-post, :title "Second blog post"}]))
+   (GET "/" [] (-> (resources/get-posts) vec ->transit-response))
    (route/resources "/")
    (route/not-found "<h1>Not Found :(</h1>")))
 
