@@ -71,16 +71,4 @@
                                    [org.clojure/tools.nrepl "0.2.13"]]
                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
                   :plugins [[lein-doo "0.1.8"]
-                            [deraen/lein-sass4clj "0.3.1"]]}}
-
-  :cljsbuild
-  {:builds
-   [{:id "dev"
-     :source-paths ["src/cljs" "src/cljc" "dev/src/cljs"]
-     :compiler {:main blog.dev
-                :output-to "resources/blog/public/js/compiled/app/app.js"
-                :output-dir "resources/blog/public/js/compiled/app/out"
-                :asset-path "js/compiled/app/out"
-                :source-map-timestamp true
-                :preloads [devtools.preload re-frisk.preload]
-                :external-config {:devtools/config {:features-to-install :all}}}}]})
+                            [deraen/lein-sass4clj "0.3.1"]]}})
